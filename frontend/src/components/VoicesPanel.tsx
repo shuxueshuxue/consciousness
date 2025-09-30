@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import BookPage from './BookPage';
 
 interface VoicesPanelProps {
   children: ReactNode;
@@ -6,8 +7,8 @@ interface VoicesPanelProps {
 
 export default function VoicesPanel({ children }: VoicesPanelProps) {
   return (
-    <div className="right-page">
+    <BookPage side="right">
       {children}
-    </div>
+    </BookPage>
   );
 }

@@ -3,39 +3,47 @@ import './App.css'
 import WritingArea from './components/WritingArea'
 import VoicesPanel from './components/VoicesPanel'
 import VoiceComment from './components/VoiceComment'
+import BinderRings from './components/BinderRings'
+
+interface Voice {
+  name: string;
+  text: string;
+}
 
 function App() {
   const [text, setText] = useState('');
-  const [comment, setComment] = useState('');
-  const [voiceName, setVoiceName] = useState('');
+  const [voices, setVoices] = useState<Voice[]>([]);
 
   const handleTextChange = (newText: string) => {
     setText(newText);
 
-    // Simple trigger: if user types "I feel"
+    const newVoices: Voice[] = [];
+
     if (newText.toLowerCase().includes('i feel')) {
-      setVoiceName('Logic');
-      setComment('Feelings are just chemical reactions.');
-    } else if (newText.toLowerCase().includes('i think')) {
-      setVoiceName('Emotion');
-      setComment('But what does your heart say?');
-    } else if (newText.toLowerCase().includes('should i')) {
-      setVoiceName('Doubt');
-      setComment('Are you sure you even want to know?');
-    } else if (newText.length > 50 && !comment) {
-      setVoiceName('Memory');
-      setComment('This reminds me of something you wrote before...');
+      newVoices.push({ name: 'Logic', text: 'Feelings are just chemical reactions.' });
     }
+    if (newText.toLowerCase().includes('i think')) {
+      newVoices.push({ name: 'Emotion', text: 'But what does your heart say?' });
+    }
+    if (newText.toLowerCase().includes('should i')) {
+      newVoices.push({ name: 'Doubt', text: 'Are you sure you even want to know?' });
+    }
+    if (newText.length > 50) {
+      newVoices.push({ name: 'Memory', text: 'This reminds me of something you wrote before...' });
+    }
+
+    setVoices(newVoices);
   };
 
   return (
     <div className="book-interface">
       <WritingArea value={text} onChange={handleTextChange} />
-      {comment && (
-        <VoicesPanel>
-          <VoiceComment voice={voiceName} text={comment} />
-        </VoicesPanel>
-      )}
+      <VoicesPanel>
+        {voices.map((voice, index) => (
+          <VoiceComment key={index} voice={voice.name} text={voice.text} />
+        ))}
+      </VoicesPanel>
+      <BinderRings />
     </div>
   );
 }

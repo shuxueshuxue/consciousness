@@ -7,37 +7,50 @@
   gap: 2rem;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
+
+  /* Binder ring configuration */
+  --gap-size: 2rem;
+  --hole-diameter: 30px;
+  --bar-width: 100px;
+  --bar-height: 25px;
 }
 
-.left-page {
+/* Book pages */
+.book-page {
   flex: 1;
   display: flex;
-}
-
-.left-page textarea {
-  width: 100%;
-  height: 100%;
-  padding: 2rem;
-  font-size: 1.2rem;
-  line-height: 1.8;
+  background-color: #fffef9;
   border: 1px solid #ccc;
   border-radius: 4px;
-  resize: none;
-  font-family: 'Georgia', serif;
-  background-color: #fffef9;
-  color: #333;
-  box-sizing: border-box;
+  position: relative;
 }
 
-.right-page {
-  flex: 1;
-  display: flex;
+.book-page.right-page {
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
-  background-color: #fffef9;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+}
+
+.book-page.right-page > * {
+  margin-left: 2rem;
+}
+
+/* Editable text area overlay */
+.editable-text-area {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  padding-right: 4rem;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  border: none;
+  resize: none;
+  font-family: 'Georgia', serif;
+  background-color: transparent;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
 }
 
 .voice-comment {
@@ -61,4 +74,50 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Binder rings */
+.binder-ring {
+  position: absolute;
+  left: 2rem;
+  right: 2rem;
+  height: 20px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.hole-left, .hole-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--hole-diameter);
+  height: var(--hole-diameter);
+  border-radius: 50%;
+  background: #f5e6d3;
+  z-index: 102;
+}
+
+.hole-left {
+  left: calc(50% - var(--gap-size) - var(--bar-width) / 2 - var(--hole-diameter) / 2);
+}
+
+.hole-right {
+  left: calc(50% - var(--gap-size) + var(--bar-width) / 2 - var(--hole-diameter) / 2);
+}
+
+.ring-bar {
+  position: absolute;
+  left: calc(50% - var(--gap-size));
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--bar-width);
+  height: var(--bar-height);
+  background: linear-gradient(180deg,
+    #666 0%,
+    #aaa 50%,
+    #666 100%
+  );
+  border-radius: calc(var(--bar-height) / 2);
+  z-index: 103;
 }
