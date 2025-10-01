@@ -97,6 +97,21 @@
   animation: fadeIn 0.5s ease-in;
 }
 
+.voice-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.voice-icon {
+  font-size: 1.25rem;
+}
+
+.voice-text {
+  margin-left: 1.75rem;
+}
+
 .voice-comment-logic {
   background-color: #e6f2ff;
   border-color: #4d9fff;
