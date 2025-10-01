@@ -1,7 +1,6 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Highlight from '@tiptap/extension-highlight';
-import { useEffect } from 'react';
+import { VoiceHighlight } from '../extensions/VoiceHighlight';
 
 interface EditableTextAreaProps {
   value: string;
@@ -12,9 +11,7 @@ export default function EditableTextArea({ value, onChange }: EditableTextAreaPr
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Highlight.configure({
-        multicolor: true,
-      }),
+      VoiceHighlight,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -22,12 +19,6 @@ export default function EditableTextArea({ value, onChange }: EditableTextAreaPr
     },
     autofocus: true,
   });
-
-  useEffect(() => {
-    if (editor && editor.getText() !== value) {
-      editor.commands.setContent(value);
-    }
-  }, [value, editor]);
 
   return <div className="editable-text-area"><EditorContent editor={editor} /></div>;
 }

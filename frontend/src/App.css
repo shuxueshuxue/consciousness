@@ -156,24 +156,23 @@
 }
 
 /* Watercolor highlight effects */
-mark {
-  background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ffff43);
+.voice-highlight {
   margin: -2px -6px;
   padding: 2px 6px;
 }
 
-mark[data-color="yellow"] {
+.voice-highlight-yellow {
   background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ffff43);
 }
 
-mark[data-color="blue"] {
+.voice-highlight-blue {
   background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-7&color=a3d5ff);
 }
 
-mark[data-color="pink"] {
+.voice-highlight-pink {
   background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffb3d9);
 }
 
-mark[data-color="green"] {
+.voice-highlight-green {
   background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-6&color=b3ffb3);
 }
