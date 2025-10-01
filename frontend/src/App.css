@@ -88,14 +88,33 @@
 
 .voice-comment {
   padding: 1rem;
-  background-color: #fff5e6;
-  border-left: 4px solid #ff9800;
+  border-left: 4px solid;
   border-radius: 4px;
   font-family: 'Excalifont', 'Georgia', serif;
   font-size: 1rem;
   line-height: 1.6;
   color: #333;
   animation: fadeIn 0.5s ease-in;
+}
+
+.voice-comment-logic {
+  background-color: #e6f2ff;
+  border-color: #4d9fff;
+}
+
+.voice-comment-emotion {
+  background-color: #ffe6f2;
+  border-color: #ff66b3;
+}
+
+.voice-comment-doubt {
+  background-color: #fffbe6;
+  border-color: #ffdd33;
+}
+
+.voice-comment-memory {
+  background-color: #e6ffe6;
+  border-color: #66ff66;
 }
 
 @keyframes fadeIn {
