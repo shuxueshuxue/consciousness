@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tiptap/extension-highlight": "^3.6.2",
+    "@tiptap/react": "^3.6.2",
+    "@tiptap/starter-kit": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
