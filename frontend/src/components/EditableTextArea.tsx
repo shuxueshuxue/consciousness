@@ -3,20 +3,13 @@ import StarterKit from '@tiptap/starter-kit';
 import { VoiceHighlight } from '../extensions/VoiceHighlight';
 
 interface EditableTextAreaProps {
-  value: string;
   onChange: (text: string) => void;
 }
 
-export default function EditableTextArea({ value, onChange }: EditableTextAreaProps) {
+export default function EditableTextArea({ onChange }: EditableTextAreaProps) {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      VoiceHighlight,
-    ],
-    content: value,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getText());
-    },
+    extensions: [StarterKit, VoiceHighlight],
+    onUpdate: ({ editor }) => onChange(editor.getText()),
     autofocus: true,
   });
 

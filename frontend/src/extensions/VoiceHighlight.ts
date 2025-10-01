@@ -1,12 +1,7 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { Decoration, DecorationSet } from '@tiptap/pm/view';
-
-const VOICE_TRIGGERS = [
-  { phrase: 'i feel', color: 'blue' },
-  { phrase: 'i think', color: 'pink' },
-  { phrase: 'should i', color: 'yellow' },
-];
+import { VOICE_TRIGGERS } from '../config/voices';
 
 export const VoiceHighlight = Extension.create({
   name: 'voiceHighlight',
