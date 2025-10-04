@@ -1,25 +1,46 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { Decoration, DecorationSet } from '@tiptap/pm/view';
-import { VOICE_TRIGGERS } from '../config/voices';
 
-export const VoiceHighlight = Extension.create({
+export interface VoiceTrigger {
+  phrase: string;
+  voice: string;
+  comment: string;
+  color: string;
+  icon: string;
+}
+
+export interface VoiceHighlightOptions {
+  triggers: VoiceTrigger[];
+}
+
+export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
   name: 'voiceHighlight',
 
+  addOptions() {
+    return {
+      triggers: [],
+    };
+  },
+
   addProseMirrorPlugins() {
+    const triggers = this.options.triggers;
+
     return [
       new Plugin({
         key: new PluginKey('voiceHighlight'),
 
         state: {
           init(_, { doc }) {
-            return findHighlights(doc);
+            return findHighlights(doc, triggers);
           },
 
           apply(tr, oldState) {
-            // Only recalculate if document changed
-            if (tr.docChanged) {
-              return findHighlights(tr.doc);
+            // @@@ Dynamic updates - Recalculate on doc change or meta change
+            const metaChanged = tr.getMeta('voiceHighlight');
+            if (tr.docChanged || metaChanged) {
+              const newTriggers = metaChanged?.triggers || triggers;
+              return findHighlights(tr.doc, newTriggers);
             }
             return oldState;
           },
@@ -35,11 +56,11 @@ export const VoiceHighlight = Extension.create({
   },
 });
 
-function findHighlights(doc: any): DecorationSet {
+function findHighlights(doc: any, triggers: VoiceTrigger[]): DecorationSet {
   const decorations: Decoration[] = [];
   const text = doc.textContent.toLowerCase();
 
-  VOICE_TRIGGERS.forEach(({ phrase, color }) => {
+  triggers.forEach(({ phrase, color }) => {
     const pos = text.indexOf(phrase);
 
     if (pos !== -1) {
