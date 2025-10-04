@@ -14,6 +14,7 @@ export interface VoiceHighlightOptions {
   triggers: VoiceTrigger[];
 }
 
+// Dynamic voice highlighting with real-time updates
 export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
   name: 'voiceHighlight',
 
@@ -24,7 +25,7 @@ export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
   },
 
   addProseMirrorPlugins() {
-    const triggers = this.options.triggers;
+    let triggers = this.options.triggers;
 
     return [
       new Plugin({
@@ -32,15 +33,24 @@ export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
 
         state: {
           init(_, { doc }) {
-            return findHighlights(doc, triggers);
+            return { decorations: findHighlights(doc, triggers), triggers };
           },
 
           apply(tr, oldState) {
             // @@@ Dynamic updates - Recalculate on doc change or meta change
             const metaChanged = tr.getMeta('voiceHighlight');
-            if (tr.docChanged || metaChanged) {
-              const newTriggers = metaChanged?.triggers || triggers;
-              return findHighlights(tr.doc, newTriggers);
+            if (metaChanged?.triggers) {
+              triggers = metaChanged.triggers;
+              return {
+                decorations: findHighlights(tr.doc, triggers),
+                triggers
+              };
+            }
+            if (tr.docChanged) {
+              return {
+                decorations: findHighlights(tr.doc, oldState.triggers || triggers),
+                triggers: oldState.triggers || triggers
+              };
             }
             return oldState;
           },
@@ -48,7 +58,7 @@ export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
 
         props: {
           decorations(state) {
-            return this.getState(state);
+            return this.getState(state)?.decorations;
           },
         },
       }),

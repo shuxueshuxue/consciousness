@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import WritingArea from './components/WritingArea'
 import VoicesPanel from './components/VoicesPanel'
@@ -17,19 +17,20 @@ interface Voice {
 function App() {
   const [voices, setVoices] = useState<Voice[]>([]);
   const [voiceTriggers, setVoiceTriggers] = useState<VoiceTrigger[]>(VOICE_TRIGGERS);
+  const [currentText, setCurrentText] = useState<string>('');
 
-  const handleTextChange = (newText: string) => {
+  const detectVoices = (text: string, triggers: VoiceTrigger[]) => {
     const newVoices: Voice[] = [];
-    const lowerText = newText.toLowerCase();
+    const lowerText = text.toLowerCase();
 
-    voiceTriggers.forEach(({ phrase, voice, comment, icon }) => {
+    triggers.forEach(({ phrase, voice, comment, icon }) => {
       const index = lowerText.indexOf(phrase);
       if (index !== -1) {
         newVoices.push({ name: voice, text: comment, icon, position: index });
       }
     });
 
-    if (newText.length > MEMORY_VOICE.minLength && !newVoices.find(v => v.name === MEMORY_VOICE.voice)) {
+    if (text.length > MEMORY_VOICE.minLength && !newVoices.find(v => v.name === MEMORY_VOICE.voice)) {
       newVoices.push({ name: MEMORY_VOICE.voice, text: MEMORY_VOICE.comment, icon: MEMORY_VOICE.icon, position: Infinity });
     }
 
@@ -39,17 +40,62 @@ function App() {
     setVoices(newVoices);
   };
 
-  // Example: Add a new trigger dynamically
-  const addCustomTrigger = () => {
-    const newTrigger: VoiceTrigger = {
-      phrase: 'remember when',
-      voice: 'Nostalgia',
-      comment: 'The past always seems brighter from here...',
-      color: 'purple',
-      icon: 'cloud',
-    };
-    setVoiceTriggers([...voiceTriggers, newTrigger]);
+  const handleTextChange = (newText: string) => {
+    setCurrentText(newText);
+    detectVoices(newText, voiceTriggers);
   };
+
+  // @@@ Re-detect voices when triggers change
+  useEffect(() => {
+    detectVoices(currentText, voiceTriggers);
+  }, [voiceTriggers]);
+
+  // @@@ Trigger management methods - ready for backend integration
+
+  // Add a new trigger
+  const addTrigger = (trigger: VoiceTrigger) => {
+    setVoiceTriggers([...voiceTriggers, trigger]);
+  };
+
+  // Remove a trigger by phrase
+  const removeTrigger = (phrase: string) => {
+    setVoiceTriggers(voiceTriggers.filter(t => t.phrase !== phrase));
+  };
+
+  // Update an existing trigger
+  const updateTrigger = (phrase: string, updates: Partial<VoiceTrigger>) => {
+    setVoiceTriggers(voiceTriggers.map(t =>
+      t.phrase === phrase ? { ...t, ...updates } : t
+    ));
+  };
+
+  // Replace all triggers (e.g., from API)
+  const setAllTriggers = (newTriggers: VoiceTrigger[]) => {
+    setVoiceTriggers(newTriggers);
+  };
+
+  // Example usage (uncomment to test):
+  // setTimeout(() => {
+  //   addTrigger({
+  //     phrase: 'remember when',
+  //     voice: 'Nostalgia',
+  //     comment: 'The past always seems brighter from here...',
+  //     color: 'purple',
+  //     icon: 'cloud',
+  //   });
+  // }, 3000);
+
+  // Expose methods to window for testing in console
+  useEffect(() => {
+    (window as any).voiceControls = {
+      addTrigger,
+      removeTrigger,
+      updateTrigger,
+      setAllTriggers,
+      getCurrentTriggers: () => voiceTriggers,
+    };
+    console.log('Voice controls available! Try: window.voiceControls.addTrigger({...})');
+  }, [voiceTriggers]);
 
   return (
     <div className="book-interface">

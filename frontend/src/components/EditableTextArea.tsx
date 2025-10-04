@@ -21,9 +21,10 @@ export default function EditableTextArea({ onChange, triggers }: EditableTextAre
   // @@@ Dynamic trigger updates - Update highlights when triggers change
   useEffect(() => {
     if (editor && editor.isEditable) {
-      editor.chain()
-        .setMeta('voiceHighlight', { triggers })
-        .run();
+      // Force recalculation by triggering a transaction with meta
+      const { tr } = editor.state;
+      tr.setMeta('voiceHighlight', { triggers });
+      editor.view.dispatch(tr);
     }
   }, [triggers, editor]);
 

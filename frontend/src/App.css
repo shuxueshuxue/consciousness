@@ -132,6 +132,11 @@
   border-color: #66ff66;
 }
 
+.voice-comment-nostalgia {
+  background-color: #f3e6ff;
+  border-color: #b366ff;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -209,4 +214,8 @@
 
 .voice-highlight-green {
   background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-6&color=b3ffb3);
+}
+
+.voice-highlight-purple {
+  background: url(https://s2.svgbox.net/pen-brushes.svg?ic=brush-5&color=ddb3ff);
 }
