@@ -14,7 +14,6 @@ export interface VoiceHighlightOptions {
   triggers: VoiceTrigger[];
 }
 
-// Dynamic voice highlighting with real-time updates
 export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
   name: 'voiceHighlight',
 
@@ -40,16 +39,17 @@ export const VoiceHighlight = Extension.create<VoiceHighlightOptions>({
             // @@@ Dynamic updates - Recalculate on doc change or meta change
             const metaChanged = tr.getMeta('voiceHighlight');
             if (metaChanged?.triggers) {
-              triggers = metaChanged.triggers;
+              const newTriggers = metaChanged.triggers;
               return {
-                decorations: findHighlights(tr.doc, triggers),
-                triggers
+                decorations: findHighlights(tr.doc, newTriggers),
+                triggers: newTriggers
               };
             }
             if (tr.docChanged) {
+              const currentTriggers = oldState.triggers || triggers;
               return {
-                decorations: findHighlights(tr.doc, oldState.triggers || triggers),
-                triggers: oldState.triggers || triggers
+                decorations: findHighlights(tr.doc, currentTriggers),
+                triggers: currentTriggers
               };
             }
             return oldState;

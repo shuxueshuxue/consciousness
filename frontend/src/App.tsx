@@ -74,17 +74,6 @@ function App() {
     setVoiceTriggers(newTriggers);
   };
 
-  // Example usage (uncomment to test):
-  // setTimeout(() => {
-  //   addTrigger({
-  //     phrase: 'remember when',
-  //     voice: 'Nostalgia',
-  //     comment: 'The past always seems brighter from here...',
-  //     color: 'purple',
-  //     icon: 'cloud',
-  //   });
-  // }, 3000);
-
   // Expose methods to window for testing in console
   useEffect(() => {
     (window as any).voiceControls = {
@@ -94,7 +83,6 @@ function App() {
       setAllTriggers,
       getCurrentTriggers: () => voiceTriggers,
     };
-    console.log('Voice controls available! Try: window.voiceControls.addTrigger({...})');
   }, [voiceTriggers]);
 
   return (
